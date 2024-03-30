@@ -7,6 +7,7 @@ import { Avatar, Button, Form, Tooltip } from 'antd'
 import { AntDesignOutlined, UserOutlined } from '@ant-design/icons'
 import FormItem from 'antd/es/form/FormItem'
 import TextArea from 'antd/es/input/TextArea'
+import ResponseCard from './ResponseCard'
 
 const FeedCard = ({ question }) => {
   const [clickAnswer, setClickAnswer] = useState(false)
@@ -28,12 +29,17 @@ const FeedCard = ({ question }) => {
       <article className='feed'>
         <div className='card-top'>
           <div className='left'>
-            <h2>{question.title}</h2>
+            <h2>{question?.title}</h2>
             <Link to='/' className='author'>
-              <img src={profile} alt='author profile' />
+              <img
+                src={
+                  question?.author?.image ? question?.author?.image : profile
+                }
+                alt='author profile'
+              />
               <div className='author-info'>
-                <span>Diam Diallo</span>
-                <p>@diamil-123</p>
+                <span>{question?.author?.name}</span>
+                <p>{question?.author?.pseudo}</p>
               </div>
             </Link>
           </div>
@@ -41,17 +47,12 @@ const FeedCard = ({ question }) => {
             <SaveOutlined className='save-icon'></SaveOutlined>
           </div>
         </div>
-        <p>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Saepe, quis
-          magni! Debitis velit esse nam sapiente cum sint accusantium, corporis
-          exercitationem harum dignissimos reprehenderit odit totam quasi
-          numquam aspernatur dolores?
-        </p>
+        <p>{question.description}</p>
         <div className='card-bottom'>
           <Button
             type='link'
             className='card-bottom-item'
-            onClick={() => showAnswerForm(question.id)}
+            onClick={() => showAnswerForm(question?.id)}
           >
             <EditOutlined />
             <span>Repondre</span>
@@ -83,7 +84,7 @@ const FeedCard = ({ question }) => {
             />
           </Avatar.Group>
           <Button type='link' onClick={() => showAnswersList(question.id)}>
-            18 ont repondu
+            {question?.responses?.length} ont repondu
           </Button>
         </div>
       </article>
@@ -108,19 +109,13 @@ const FeedCard = ({ question }) => {
             : 'feed-answers-hide'
         }
       >
-        <Link to='/' className='author'>
-          <img src={profile} alt='author profile' />
-          <div className='author-info'>
-            <span>Diam Diallo</span>
-            <p>@diamil-123</p>
-          </div>
-        </Link>
-        <p>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Saepe, quis
-          magni! Debitis velit esse nam sapiente cum sint accusantium, corporis
-          exercitationem harum dignissimos reprehenderit odit totam quasi
-          numquam aspernatur dolores?
-        </p>
+        {question?.responses?.length > 0 ? (
+          question?.responses.map((item) => (
+            <ResponseCard key={item.id} response={item} />
+          ))
+        ) : (
+          <p>Pas de reponse a cette question</p>
+        )}
       </div>
     </>
   )
