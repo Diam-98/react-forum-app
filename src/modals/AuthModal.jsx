@@ -50,6 +50,8 @@ const AuthModal = ({ open, setOpen }) => {
       UserAPI.register(formData)
         .then((response) => {
           console.log(response)
+          setUser(response.data.data.user)
+          setToken(response.data.data.token)
           setConfirmLoading(false)
           setOpen(false)
         })

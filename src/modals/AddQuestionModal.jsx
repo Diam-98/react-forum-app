@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Modal, Form, Input } from 'antd'
+import { QuestionApi } from '../api/QuestionApi'
 
 const AddQuestionModal = ({
   openAddQuestionModal,
@@ -9,12 +10,15 @@ const AddQuestionModal = ({
   const [form] = Form.useForm()
 
   const onFinish = (values) => {
-    console.log('Received values:', values)
     setConfirmLoading(true)
-    setTimeout(() => {
-      setOpenAddQuestionModal(false)
-      setConfirmLoading(false)
-    }, 2000)
+    QuestionApi.addQuestion(values)
+      .then((response) => {
+        setConfirmLoading(false)
+        setOpenAddQuestionModal(false)
+      })
+      .catch((err) => {
+        setConfirmLoading(false)
+      })
   }
 
   const onFinishFailed = (errorInfo) => {
@@ -28,7 +32,7 @@ const AddQuestionModal = ({
   return (
     <>
       <Modal
-        title='Modal 1000px width'
+        title='Ajouter une question'
         centered
         open={openAddQuestionModal}
         onOk={() => form.submit()}
@@ -44,15 +48,15 @@ const AddQuestionModal = ({
           onFinishFailed={onFinishFailed}
           validateMessages={validateMessages}
         >
-          <Form.Item name='title' label='Title' rules={[{ required: true }]}>
-            <Input />
+          <Form.Item name='title' label='Sujet' rules={[{ required: true }]}>
+            <Input placeholder='Donner un titre' />
           </Form.Item>
           <Form.Item
             name='description'
             label='Description'
             rules={[{ required: true }]}
           >
-            <Input.TextArea />
+            <Input.TextArea placeholder='Donner une description' />
           </Form.Item>
         </Form>
       </Modal>

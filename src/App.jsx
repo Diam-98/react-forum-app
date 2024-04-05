@@ -6,24 +6,24 @@ import { UserAPI } from './api/UserApi'
 import { useAuth } from './context/AuthProvider'
 
 function App() {
-  const { user, setUser } = useAuth()
+  const { user, setUser, setToken } = useAuth()
   useEffect(() => {
     UserAPI.currentUser()
       .then((response) => {
         setUser(response.data.data)
-        console.log(response.data.data)
       })
       .catch((err) => {
         const resp = err.response
-        // if (resp.status === 401) {
-        //   return <Navigate to='/login' state={{ from: location }} replace />
-        // }
+        if (resp.status === 401) {
+          setUser({})
+          setToken(null)
+        }
       })
   }, [])
 
   return (
     <>
-      <Header user={user} />
+      <Header user={user} setUser={setUser} setToken={setToken} />
       <main>
         <Navbar />
         <Outlet />

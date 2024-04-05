@@ -9,6 +9,10 @@ export const QuestionApi = {
     return axiosClient.get('/question')
   },
 
+  addResponse: (values, id) => {
+    return axiosClient.post(`/question/${id}/response`, values)
+  },
+
   saveQuestion: () => {
     return axiosClient.get('/saveQuestion')
   },

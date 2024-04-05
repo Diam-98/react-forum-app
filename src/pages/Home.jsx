@@ -31,14 +31,14 @@ const Home = () => {
 
   return (
     <section className='feed-page'>
-      <article className='search'>
+      {/* <article className='search'>
         <Search
           placeholder='input search text'
           enterButton='Search'
           size='large'
           loading
         />
-      </article>
+      </article> */}
       {loading === true ? (
         <Spin size='large' />
       ) : (
@@ -47,10 +47,10 @@ const Home = () => {
         ))
       )}
 
-      <Button>
+      {/* <Button>
         <LoadingOutlined />
         Charger des questions ...
-      </Button>
+      </Button> */}
     </section>
   )
 }

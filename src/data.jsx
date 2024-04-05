@@ -24,12 +24,12 @@ export const menuItem = [
     icon: <EditOutlined />,
     path: '/responses',
   },
-  {
-    id: 4,
-    title: 'Sauvegarde',
-    icon: <SaveOutlined />,
-    path: '/save',
-  },
+  // {
+  //   id: 4,
+  //   title: 'Sauvegarde',
+  //   icon: <SaveOutlined />,
+  //   path: '/save',
+  // },
 ]
 
 export const questions = [

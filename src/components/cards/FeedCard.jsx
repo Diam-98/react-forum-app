@@ -3,16 +3,17 @@ import './feedCard.css'
 import { Link } from 'react-router-dom'
 import profile from '../../assets/profile.jpg'
 import { EditOutlined, SaveOutlined } from '@ant-design/icons'
-import { Avatar, Button, Form, Tooltip } from 'antd'
+import { Avatar, Button, Form, Input, Tooltip } from 'antd'
 import { AntDesignOutlined, UserOutlined } from '@ant-design/icons'
-import FormItem from 'antd/es/form/FormItem'
-import TextArea from 'antd/es/input/TextArea'
 import ResponseCard from './ResponseCard'
+import axiosClient from '../../api/axiosClient'
 
 const FeedCard = ({ question }) => {
   const [clickAnswer, setClickAnswer] = useState(false)
   const [selectedQuestionId, setSelectedQuestionId] = useState(null)
   const [clickAnswerList, setClickAnswerList] = useState(false)
+  const [confirmLoading, setConfirmLoading] = useState(false)
+  const [form] = Form.useForm()
 
   const showAnswerForm = (id) => {
     setSelectedQuestionId(id)
@@ -22,6 +23,27 @@ const FeedCard = ({ question }) => {
   const showAnswersList = (id) => {
     setSelectedQuestionId(id)
     setClickAnswerList(!clickAnswerList)
+  }
+
+  const onFinish = (values) => {
+    setConfirmLoading(true)
+    console.log(values)
+    console.log(selectedQuestionId)
+
+    axiosClient
+      .post(`/question/${selectedQuestionId}}/response`, values)
+      .then((response) => {
+        console.log(response)
+        setConfirmLoading(false)
+      })
+      .catch((err) => {
+        console.log(err.response)
+        setConfirmLoading(false)
+      })
+  }
+
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo)
   }
 
   return (
@@ -43,9 +65,6 @@ const FeedCard = ({ question }) => {
               </div>
             </Link>
           </div>
-          <div className='save-question'>
-            <SaveOutlined className='save-icon'></SaveOutlined>
-          </div>
         </div>
         <p>{question.description}</p>
         <div className='card-bottom'>
@@ -57,32 +76,7 @@ const FeedCard = ({ question }) => {
             <EditOutlined />
             <span>Repondre</span>
           </Button>
-          <Avatar.Group>
-            <Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=1' />
-            <a href='https://ant.design'>
-              <Avatar
-                style={{
-                  backgroundColor: '#f56a00',
-                }}
-              >
-                K
-              </Avatar>
-            </a>
-            <Tooltip title='Ant User' placement='top'>
-              <Avatar
-                style={{
-                  backgroundColor: '#87d068',
-                }}
-                icon={<UserOutlined />}
-              />
-            </Tooltip>
-            <Avatar
-              style={{
-                backgroundColor: '#1677ff',
-              }}
-              icon={<AntDesignOutlined />}
-            />
-          </Avatar.Group>
+
           <Button type='link' onClick={() => showAnswersList(question.id)}>
             {question?.responses?.length} ont repondu
           </Button>
@@ -95,11 +89,27 @@ const FeedCard = ({ question }) => {
             : 'answer-form-hide'
         }
       >
-        <Form layout='vertical'>
-          <FormItem>
-            <TextArea ows={4} placeholder='Ajouter une reponse' />
-          </FormItem>
-          <Button>Repondre</Button>
+        <Form
+          layout='vertical'
+          form={form}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          autoComplete='off'
+        >
+          <Form.Item
+            name='description'
+            rules={[
+              {
+                required: true,
+                message: 'Entrez la description de votre commentaire',
+              },
+            ]}
+          >
+            <Input.TextArea placeholder='Laisser un commentaire' />
+          </Form.Item>
+          <Button loading={confirmLoading} onClick={() => form.submit()}>
+            Repondre
+          </Button>
         </Form>
       </div>
       <div
