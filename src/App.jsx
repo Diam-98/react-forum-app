@@ -25,7 +25,7 @@ function App() {
     <>
       <Header user={user} setUser={setUser} setToken={setToken} />
       <main>
-        <Navbar />
+        {Object.keys(user).length != 0 && <Navbar />}
         <Outlet />
       </main>
     </>

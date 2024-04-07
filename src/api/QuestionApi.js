@@ -11,9 +11,5 @@ export const QuestionApi = {
 
   addResponse: (values, id) => {
     return axiosClient.post(`/question/${id}/response`, values)
-  },
-
-  saveQuestion: () => {
-    return axiosClient.get('/saveQuestion')
-  },
+  }
 }

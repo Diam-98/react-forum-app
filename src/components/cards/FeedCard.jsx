@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
 import './feedCard.css'
-import { Link } from 'react-router-dom'
 import profile from '../../assets/profile.jpg'
-import { EditOutlined, SaveOutlined } from '@ant-design/icons'
-import { Avatar, Button, Form, Input, Tooltip } from 'antd'
-import { AntDesignOutlined, UserOutlined } from '@ant-design/icons'
+import { EditOutlined } from '@ant-design/icons'
+import {  Button, Form, Input } from 'antd'
 import ResponseCard from './ResponseCard'
 import axiosClient from '../../api/axiosClient'
 
@@ -50,9 +48,8 @@ const FeedCard = ({ question }) => {
     <>
       <article className='feed'>
         <div className='card-top'>
-          <div className='left'>
-            <h2>{question?.title}</h2>
-            <Link to='/' className='author'>
+        <h2>{question?.title}</h2>
+            <div className='author'>
               <img
                 src={
                   question?.author?.image ? question?.author?.image : profile
@@ -63,8 +60,7 @@ const FeedCard = ({ question }) => {
                 <span>{question?.author?.name}</span>
                 <p>{question?.author?.pseudo}</p>
               </div>
-            </Link>
-          </div>
+            </div>
         </div>
         <p>{question.description}</p>
         <div className='card-bottom'>
